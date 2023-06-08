@@ -1,16 +1,40 @@
+import { useState, useEffect } from "react";
+import ContactList from "./ContactList";
+import NameForm from "./NameForm";
+import Filter from "./Filter";
+
 export const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    const storedContacts = localStorage.getItem("contacts");
+    if (storedContacts) {
+      setContacts(JSON.parse(storedContacts));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
+  const filteredContacts = contacts.filter(
+    (contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase()) ||
+      contact.number.toLowerCase().includes(Number(filter))
+  );
+
+  const handleDelete = (id) => {
+    setContacts((prevState) => prevState.filter((contact) => contact.id !== id));
+  };
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
+    <div>
+      <h2>Phonebook</h2>
+      <NameForm setContacts={setContacts} contacts={contacts} />
+      <Filter filter={filter} setFilter={setFilter} />
+      <ContactList filteredContacts={filteredContacts} handleDelete={handleDelete} />
     </div>
   );
 };
+
