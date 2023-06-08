@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ContactList from "./ContactList";
 import NameForm from "./NameForm";
 import Filter from "./Filter";
+import styles from "./styles.module.css";
 
 export const App = () => {
   const [contacts, setContacts] = useState([]);
@@ -29,7 +30,7 @@ export const App = () => {
   };
 
   return (
-    <div>
+    <div className={styles.phonebook}>
       <h2>Phonebook</h2>
       <NameForm setContacts={setContacts} contacts={contacts} />
       <Filter filter={filter} setFilter={setFilter} />
